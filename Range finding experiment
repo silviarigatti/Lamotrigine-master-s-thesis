@@ -16,6 +16,7 @@
 rm(list=ls()) 
 # clear console window
 cat("\014") 
+Sys.setenv(LANG = "en") # set english as language
 
 #####
 # Load packages
@@ -50,7 +51,7 @@ str(zooplankton_data)
 zooplankton_data$unit <- gsub("\\?", "μ", zooplankton_data$unit)
 
 #####
-# calculate consumed algae
+# FEEDING RATE
 #####
 
 # calculate the mean start algae concentration & put it in a new
@@ -104,7 +105,6 @@ zooplankton_data<-zooplankton_data %>%
 zooplankton_data<-zooplankton_data %>% 
   filter(type=="zooplankton") %>% 
   mutate(eggprod_copepod_day=eggprod_copepod/2)
-
 
 #####
 # subset a specific endpoint for further analysis
@@ -175,11 +175,9 @@ summary(Dunnetts)
 # y axis shows variation 
 plot(ANOVA, which = 1)
 
-
 # we can also test if the variances are homogeneous using a
 # levene's test (variances are homogeneous if p>0.05)
 leveneTest(effect~conc, data=data1)
-
 
 # the second plot is a quantile-quantile plot (Q-Q plot), where we can see if the residuals are
 # normally distributed. An ideal situation is with as little deviation from the line as possible
@@ -204,7 +202,6 @@ df_means <- data1 %>%
   group_by(conc) %>% 
   drop_na(effect) %>% 
   summarise_all(funs(mean, sd))
-
 
 # Plot data with ggplot
 FR_copepod_day <- ggplot(data=df_means, aes(x=conc, y=mean))+
@@ -240,8 +237,6 @@ ggsave(FR_copepod_day_, plot = FR_copepod_day, width = 6, height = 6)
 
 
 
-
-
 #####
 # EGG PRODUCTION
 #####
@@ -255,70 +250,7 @@ data1 <-zooplankton_data %>%
 # data visualisation
 #####
 
-
-# visualize data, box-whiskers plot
-# range = 0 means minimum and maximum are shown in boxplot, box shows 50% of data, 
-# black line is median
-boxplot(effect~conc, data = data1, range = 0)
-
-# change the variable "conc" to a factor (needs to be done for the ANOVA to work)
-data1$conc <- as.factor(data1$conc)
-
-# check if concentration is still numeric - gives TRUE/FALSE as output
-is.numeric(data1$conc)
-
-#####
-# ANOVA + post hoc test
-#####
-
-# fit a linear model and store it under the name "ANOVA"
-ANOVA <- lm(effect~conc, data1)
-
-# compute analysis of variance table for the fitted model
-anova(ANOVA)
-
-# make sure 0 is considered the reference when performing multiple-comparisons
-data1$conc <- relevel(data1$conc, ref = "0")
-
-# comparisons between control and the other treatments
-# specify that "conc" is what you group the data by and compare with a Dunnett's post hoc test
-# store the result under the name "Dunnetts"
-Dunnetts <- glht(ANOVA, linfct = mcp(conc = "Dunnett"))
-
-# summary of post hoc test
-summary(Dunnetts)
-
-#####
-# Assumptions - Graphical model checking & tests
-#####
-
-# there are some assumptions that the data has to fulfill in order for the 
-# results of an ANOVA to be reliable, and two of those are that the residuals of the data are
-# normally distributed and that the variances are homogeneous
-
-# the residual plot shows whether the variances are homogeneous. 
-# "funnel-shaped" data is something that should be avoided here
-
-# residual plot
-# 1 = residual plot
-# y axis shows variation 
-plot(ANOVA, which = 1)
-
-
-# we can also test if the variances are homogeneous using a
-# levene's test (variances are homogeneous if p>0.05)
-leveneTest(effect~conc, data=data1)
-
-
-# the second plot is a quantile-quantile plot (Q-Q plot), where we can see if the residuals are
-# normally distributed. An ideal situation is with as little deviation from the line as possible
-
-# Q-Q plot 
-# 2 = QQ plot
-plot(ANOVA, which = 2)
-
-# we can also use a shapiro-wilks test to test this assumption (residuals are normal if p>0.05)
-shapiro.test(ANOVA$residuals)
+### REPEAT LINES 123-191 ###
 
 #####
 # Plot with ggplot
@@ -366,10 +298,9 @@ ggsave(eggprod_copepod_day, plot = eggprod_copepod, width = 6, height = 6)
 
 
 
-
-
-###### TOTAL EGG PRODUCTION ##
-
+#####
+# TOTAL EGG PRODUCTION 
+#####
 
 # Sum eggs and nauplii 
 zooplankton_data<-zooplankton_data %>% 
@@ -394,39 +325,7 @@ data1 <-zooplankton_data %>%
 #####
 # data visualisation
 #####
-
-# visualize data, box-whiskers plot
-# range = 0 means minimum and maximum are shown in boxplot, box shows 50% of data, 
-# black line is median
-data1$conc <- factor(data1$conc, levels = conc_order)
-boxplot(effect~conc, data = data1, range = 0)
-
-# change the variable "conc" to a factor (needs to be done for the ANOVA to work)
-data1$conc <- as.factor(data1$conc)
-
-# check if concentration is still numeric - gives TRUE/FALSE as output
-is.numeric(data1$conc)
-
-#####
-# ANOVA + post hoc test
-#####
-
-# fit a linear model and store it under the name "ANOVA"
-ANOVA <- lm(effect~conc, data1)
-
-# compute analysis of variance table for the fitted model
-anova(ANOVA)
-
-# make sure 0 is considered the reference when performing multiple-comparisons
-data1$conc <- relevel(data1$conc, ref = "0")
-
-# comparisons between control and the other treatments
-# specify that "conc" is what you group the data by and compare with a Dunnett's post hoc test
-# store the result under the name "Dunnetts"
-Dunnetts <- glht(ANOVA, linfct = mcp(conc = "Dunnett"))
-
-# summary of post hoc test
-summary(Dunnetts)
+### REPEAT LINES 123-191 ###
 
 #####
 # Plot with ggplot
@@ -466,7 +365,6 @@ eggprod_copepod <- ggplot(data=df_means, aes(x=conc, y=mean))+
 
 eggprod_copepod
 
-
 # Save the ggplot to a PNG file
 ggsave(plot = eggprod_copepod,
        filename = paste0(outwd, "/eggprod_copepod_day.png"), height = 6, width = 6)
@@ -474,9 +372,9 @@ ggsave(plot = eggprod_copepod,
 
 
 
-######################
-#### MEDIAN ALGAL CELL SIZE ##
-######################
+#####
+# MEDIAN ALGAL CELL SIZE ##
+#####
 
 data1 <-zooplankton_data %>%
   select(conc, median_size) %>% 
@@ -485,45 +383,10 @@ data1 <-zooplankton_data %>%
 #####
 # data visualisation
 #####
+### REPEAT LINES 123-191 ###
 
-# visualize data, box-whiskers plot
-# range = 0 means minimum and maximum are shown in boxplot, box shows 50% of data, 
-# black line is median
-data1$conc <- factor(data1$conc)
-boxplot(effect~conc, data = data1, range = 0)
-
-# change the variable "conc" to a factor (needs to be done for the ANOVA to work)
-data1$conc <- as.factor(data1$conc)
-
-# check if concentration is still numeric - gives TRUE/FALSE as output
-is.numeric(data1$conc)
-
-#####
-# ANOVA + post hoc test
-#####
-
-# fit a linear model and store it under the name "ANOVA"
-ANOVA <- lm(effect~conc, data1)
-
-# compute analysis of variance table for the fitted model
-anova(ANOVA)
-
-# make sure 0 is considered the reference when performing multiple-comparisons
-data1$conc <- relevel(data1$conc, ref = "0")
-
-# comparisons between control and the other treatments
-# specify that "conc" is what you group the data by and compare with a Dunnett's post hoc test
-# store the result under the name "Dunnetts"
-Dunnetts <- glht(ANOVA, linfct = mcp(conc = "Dunnett"))
-
-# summary of post hoc test
-summary(Dunnetts)
-
-
-
-
+# set manually the order of the conc levels
 zooplankton_data$conc <- factor(zooplankton_data$conc, levels = c("start", 0, 0.001, 0.1, 10, 1000, 100000))
-
 
 # Summarize data
 summary_data <- zooplankton_data %>%
@@ -539,9 +402,7 @@ summary_data <- zooplankton_data %>%
     .groups = "drop"
   )
 
-
 summary_data$type <- factor(summary_data$type, levels = c("algae", "zooplankton"))
-
 
 # Create the barplot
 median_size <- ggplot(summary_data, aes(x = conc, y = mean_size, fill = type)) +
@@ -570,24 +431,16 @@ median_size <- ggplot(summary_data, aes(x = conc, y = mean_size, fill = type)) +
           labels=c("Algae bottles", "Zooplankton bottles"))+
   coord_cartesian(ylim=c(6,8))
 
-
 median_size
 
 ggsave(plot = median_size,
-       filename = paste0(outwd, "/median_size_final.png"), height = 6, width = 8)
-
-
-
-  
+       filename = paste0(outwd, "/median_size.png"), height = 6, width = 8)
 
 
 
 
-
-##########
 #####
-# subset a specific endpoint for further analysis
-### RFU PER CELL##
+# RFU PER CELL #
 #####
 
 # RFU per cell
@@ -601,47 +454,11 @@ data1 <-zooplankton_data %>%
 #####
 # data visualisation
 #####
-
-# visualize data, box-whiskers plot
-# range = 0 means minimum and maximum are shown in boxplot, box shows 50% of data, 
-# black line is median
-data1$conc <- factor(data1$conc)
-boxplot(effect~conc, data = data1, range = 0)
-
-# change the variable "conc" to a factor (needs to be done for the ANOVA to work)
-data1$conc <- as.factor(data1$conc)
-
-# check if concentration is still numeric - gives TRUE/FALSE as output
-is.numeric(data1$conc)
-
-#####
-# ANOVA + post hoc test
-#####
-
-# fit a linear model and store it under the name "ANOVA"
-ANOVA <- lm(effect~conc, data1)
-
-# compute analysis of variance table for the fitted model
-anova(ANOVA)
-
-# make sure 0 is considered the reference when performing multiple-comparisons
-data1$conc <- relevel(data1$conc, ref = "0")
-
-# comparisons between control and the other treatments
-# specify that "conc" is what you group the data by and compare with a Dunnett's post hoc test
-# store the result under the name "Dunnetts"
-Dunnetts <- glht(ANOVA, linfct = mcp(conc = "Dunnett"))
-
-# summary of post hoc test
-summary(Dunnetts)
-
-
+### REPEAT LINES 123-191 ###
 
 zooplankton_data$conc <- factor(zooplankton_data$conc, levels = c("start", 0, 0.001, 0.1, 10, 1000, 100000))
 
-
 # Summarize data
-
 summary_data <- zooplankton_data %>%
   group_by(conc, type) %>%
   filter(type != "start") %>% 
@@ -651,10 +468,7 @@ summary_data <- zooplankton_data %>%
     .groups = "drop"
   )
 
-
-
 summary_data$type <- factor(summary_data$type, levels = c("algae", "zooplankton"))
-
 
 # Create the barplot
 RFU <- ggplot(summary_data, aes(x = conc, y = RFU, fill = type)) +
@@ -695,74 +509,17 @@ ggsave(RFU_1, plot = RFU, width = 8, height = 6)
 
 
 
+#### HATCHING SUCCESS #####
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# select only data from zooplankton bottles, then select the endpoint you want to analyze
-# such as egg production (eggprod). then rename the variable "eggprod" to "effect". 
-# store the data in the new dataset "data1"
-# the level "eggprod" can be changed to any other endpoint, such as "consumed_cells_ml"
 data1 <-zooplankton_data %>%
   filter(type =="zooplankton") %>% 
   select(conc, hatching) %>% 
   rename(effect=hatching)
 
-
 #####
 # data visualisation
 #####
-
-# you can change effect for any other endpoint,
-
-# visualize data, box-whiskers plot
-# range = 0 means minimum and maximum are shown in boxplot, box shows 50% of data, 
-# black line is median (DO NOT include this graph in the lab report,
-# it is only for quickly getting an overview of the data)
-boxplot(effect~conc, data = data1, range = 0)
-
-# change the variable "conc" to a factor (needs to be done for the ANOVA to work)
-data1$conc <- as.factor(data1$conc)
-
-# check if concentration is still numeric - gives TRUE/FALSE as output
-is.numeric(data1$conc)
-
-#####
-# ANOVA + post hoc test
-#####
-
-# fit a linear model and store it under the name "ANOVA"
-ANOVA <- lm(effect~conc, data1)
-
-# compute analysis of variance table for the fitted model
-anova(ANOVA)
-
-# make sure 0 is considered the reference when performing multiple-comparisons
-data1$conc <- relevel(data1$conc, ref = "0")
-
-# comparisons between control and the other treatments
-# specify that "conc" is what you group the data by and compare with a Dunnett's post hoc test
-# store the result under the name "Dunnetts"
-Dunnetts <- glht(ANOVA, linfct = mcp(conc = "Dunnett"))
-
-# summary of post hoc test
-summary(Dunnetts)
+### REPEAT LINES 123-191 ###
 
 # summarise means and standard deviation (sd) for the variable "effect" grouped by the variable "conc"
 # this is done using code from the package "dplyr" in tidyverse
@@ -794,7 +551,6 @@ hatch <- ggplot(data=df_means, aes(x=conc, y=mean))+
         panel.background = element_blank(), axis.line = element_blank(),
         plot.title = element_text(size=14))
 
-
 # Set the filename for the output image
 hatch_1 <- file.path(outwd, "hatch.png")
 
@@ -804,23 +560,19 @@ ggsave(hatch_1, plot = hatch, width = 6, height = 6)
 
 
 
-
-#### CELL COUNT ##
-
-
+#### CELL COUNT ####
 
 # Specify the order of the concentrations
 zooplankton_data$conc <- factor(zooplankton_data$conc, levels = c("start", 0, 0.001, 0.1, 10, 1000, 100000))
 
-
 str(zooplankton_data)
 
+# Group all algae cell count data in a new column "cell_count"
 zooplankton_data<-zooplankton_data %>% 
   mutate(cell_count = ifelse(!is.na(algae_48), algae_48, ifelse(!is.na(algae_0), algae_0, NA)))
 
 summary_data <- zooplankton_data %>%
   group_by(conc, type, cell_count)
-
 
 # Summarize data
 summary_data <- zooplankton_data %>%
@@ -839,10 +591,7 @@ summary_data <- summary_data %>%
 summary_data$conc_label <- factor(summary_data$conc_label, 
                                   levels = c("start", sort(unique(as.numeric(as.character(summary_data$conc[summary_data$type != "start"]))))))
 
-
 summary_data$type <- factor(summary_data$type, levels = c("start", "algae", "zooplankton"))
-
-
 
 # Create the barplot
 cell__count <- ggplot(summary_data, aes(x = conc_label, y = cellcount, fill = type)) +
@@ -871,10 +620,8 @@ cell__count <- ggplot(summary_data, aes(x = conc_label, y = cellcount, fill = ty
     labels=c("Start bottles", "Algae bottles", "Zooplankton bottles"))+
   scale_y_continuous(breaks = seq(0, 18500, by = 2500))
 
-
 cell__count
 
 # Save the ggplot to a PNG file
 ggsave(plot = cell__count,
        filename = paste0(outwd, "/cell_count.png"), height = 6, width = 8)
-
