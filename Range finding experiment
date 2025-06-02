@@ -5,11 +5,8 @@
 # description of R script
 #####
 
-# The script calculates algae consumption in zooplankton bottles, and
-# subsets a selected endpoint for statistical testing.
-# It also tests the differences between control and
-# treatments using an ANOVA and a Dunnett's post hoc test
-# & generates a bar graph
+# The script calculates algae consumption in zooplankton bottles, and subsets a selected endpoint for statistical testing.
+# It also tests the differences between control and treatments using an ANOVA and a Dunnett's post hoc test & generates a bar graph
 
 #####
 # clean up
