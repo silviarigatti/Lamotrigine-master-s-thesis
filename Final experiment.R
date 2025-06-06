@@ -34,15 +34,15 @@ require(ggplot2)
 #####
 # Import & check data
 #####
-## change the folder if needed
 
-inwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/3rd_experiment"
-outwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/3rd_experiment/output"
+## change the "..." with the path for input folder and output folder
+inwd <- "..."
+outwd <- "..."
 
 setwd(inwd)
 
 # import data 
-# make sure your file to import is called "testdata"
+# make sure your file to import is called "testdata_3"
 zooplankton_data <- read.csv2("testdata_3.csv")
 
 # check what the data looks like (shows first 6 lines of dataset)
