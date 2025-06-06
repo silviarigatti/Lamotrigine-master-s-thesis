@@ -2,26 +2,18 @@
 # SURVIVAL FRACTION OVER INITIAL POPULATION, AND 
 # NAUPLII MOULTING INTO COPEPODITES
 
-
 ##### Housekeeping
-
-rm(list=ls()) 
-#remove ALL objects 
-Sys.setenv(LANG = "en")#Let's keep stuff in English
+rm(list=ls())  #remove ALL objects 
+Sys.setenv(LANG = "en") #Let's keep stuff in English
 Sys.setlocale("LC_ALL","English")
-cat("\014") 
-# clear console window prior to new run
+cat("\014") # clear console window prior to new run
 
-#install required packages. 
-
+# install required packages. 
 library(dplyr)
 library(ggplot2)
 library(RColorBrewer)
 library(patchwork)
 library(ggpmisc)
-
-
-
 
 ##### Set working directory
 
@@ -35,21 +27,17 @@ library(ggpmisc)
 
 ##### Import data and start analysis
 
-# import the data to the name of your dataset with taxonomy data
-
-inwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/nauplii_exp"
-outwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/nauplii_exp/output"
-
+# import the data to the name of your dataset with data
+inwd <- "..."
+outwd <- "..."
 setwd(inwd)
 
 data <- read.csv2("nauplii_exp_input.csv")
 
 View(data)
 
-
 colnames(data)[1] <- 'sample'   #rename 1st column
 data$conc <- gsub("Î¼g/L", "µg/L", data$conc)
-
 
 
 #####
