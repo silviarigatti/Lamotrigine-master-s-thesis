@@ -36,16 +36,16 @@ require(tidyverse)
 #####
 # Import & check data
 #####
-## change the folder if needed
+## change the "..." with the correct path
 
-inwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/2nd_experiment"
-outwd <- "C:/Users/Silvia/OneDrive - University of Gothenburg/THESIS/R/2nd_experiment/output"
+inwd <- "..."
+outwd <- "..."
 
 setwd(inwd)
 
 # import data 
-# make sure your file to import is called "testdata"
-zooplankton_data <- read.csv2("testdata.csv")
+# make sure your file to import is called "testdata_2"
+zooplankton_data <- read.csv2("testdata_2.csv")
 
 # check what the data looks like (shows first 6 lines of dataset)
 head(zooplankton_data)
